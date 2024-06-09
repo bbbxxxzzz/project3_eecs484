@@ -60,8 +60,8 @@ public class GetData {
                 "FROM " + userTableName + " U " +
                 "JOIN " + currentCityTableName + " curC ON U.USER_ID = curC.USER_ID " +
                 "JOIN " + hometownCityTableName + " homeC ON U.USER_ID = homeC.USER_ID " +
-                "JOIN " + cityTableName + " C1 ON curC.CITY_ID = C1.CITY_ID " +
-                "JOIN " + cityTableName + " C2 ON homeC.CITY_ID = C2.CITY_ID"
+                "JOIN " + cityTableName + " C1 ON curC.CURRENT_CITY_ID = C1.CITY_ID " +
+                "JOIN " + cityTableName + " C2 ON homeC.HOMETOWN_CITY_ID = C2.CITY_ID"
             );
 
             JSONArray userArray = new JSONArray();
@@ -96,7 +96,7 @@ public class GetData {
                 "FROM " + userTableName + " U " +
                 "JOIN " + currentCityTableName + " curC ON U.USER_ID = curC.USER_ID " +
                 "JOIN " + hometownCityTableName + " homeC ON homeC.USER_ID IS NULL " +
-                "JOIN " + cityTableName + " C1 ON curC.CITY_ID = C1.CITY_ID " 
+                "JOIN " + cityTableName + " C1 ON curC.CURRENT_CITY_ID = C1.CITY_ID " 
             );
 
             while (rstHomeNull.next()) {
@@ -127,7 +127,7 @@ public class GetData {
                 "FROM " + userTableName + " U " +
                 "JOIN " + currentCityTableName + " curC ON curC.USER_ID IS NULL " +
                 "JOIN " + hometownCityTableName + " homeC ON U.USER_ID = homeC.USER_ID " +
-                "JOIN " + cityTableName + " C1 ON homeC.CITY_ID = C1.CITY_ID " 
+                "JOIN " + cityTableName + " C1 ON homeC.HOMETOWN_CITY_ID = C1.CITY_ID " 
             );
 
             while (rstCurNull.next()) {
