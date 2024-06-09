@@ -185,7 +185,8 @@ public class GetData {
                 JSONArray friends = new JSONArray();
 
                 ResultSet rstFriends = stmt.executeQuery(
-                    "SELECT USER_ID2 FROM BidirectionalFriends WHERE USER_ID1 = " + user.getString("user_id")
+                    "FROM BidirectionalFriends " +
+                    "SELECT USER_ID2 WHERE USER_ID1 = " + user.getString("user_id")
                 );
                 while (rstFriends.next()) {
                     friends.put(rstFriends.getInt(1));
