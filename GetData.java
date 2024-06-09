@@ -56,7 +56,7 @@ public class GetData {
 
             ResultSet rst = stmt.executeQuery(
                 "SELECT U.MONTH_OF_BIRTH, C1.COUNTRY_NAME, C1.CITY_NAME, C1.STATE_NAME, C2.COUNTRY_NAME, " + 
-                "C2.CITY_NAME, C2.STATE_NAME, U.GENDER, U.USER_ID, U.DAY_OF_BIRTH, U.LAST_NAME, U.FIRST_NAME, U.YEAR_OF_BIRTH" +
+                "C2.CITY_NAME, C2.STATE_NAME, U.GENDER, U.USER_ID, U.DAY_OF_BIRTH, U.LAST_NAME, U.FIRST_NAME, U.YEAR_OF_BIRTH " +
                 "FROM " + userTableName + " U " +
                 "JOIN " + currentCityTableName + " curC ON U.USER_ID = curC.USER_ID " +
                 "JOIN " + hometownCityTableName + " homeC ON U.USER_ID = homeC.USER_ID " +
@@ -185,8 +185,7 @@ public class GetData {
                 JSONArray friends = new JSONArray();
 
                 ResultSet rstFriends = stmt.executeQuery(
-                    "FROM BidirectionalFriends " +
-                    "SELECT USER_ID2 WHERE USER_ID1 = " + user.getString("user_id")
+                    "SELECT USER_ID2 FROM BidirectionalFriends WHERE USER_ID1 = " + user.getString("user_id")
                 );
                 while (rstFriends.next()) {
                     friends.put(rstFriends.getInt(1));
