@@ -7,7 +7,7 @@ function find_user(city, dbname) {
 
     let results = [];
     // TODO: find all users who live in city
-    db.users.find({ "current.city": city }).forEach(
+    db.users.find({ "hometown.city": city }).forEach(
         function(user){results.push(user.user_id);}
     );
 
