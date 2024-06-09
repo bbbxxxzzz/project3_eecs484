@@ -179,12 +179,12 @@ public class GetData {
             }
 
             for (int i = 0; i < users_info.length(); i++) {
-                JSONObject user = users_info[i];
+                JSONObject user = users_info.getJSONObject(i);
                 
                 JSONArray friends = new JSONArray();
 
                 ResultSet rstFriends = stmt.executeQuery(
-                    "SELECT USER_ID2 FROM BidirectionalFriends WHERE USER_ID1 = " + user.getLong("user_id")
+                    "SELECT USER_ID2 FROM " + friendsTableName + " WHERE USER_ID1 = " + user.getLong("user_id")
                 );
                 while (rstFriends.next()) {
                     friends.put(rstFriends.getLong(1));
