@@ -104,12 +104,12 @@ function cleanUp(){
     print("=== Test 7 ===");
     {
     	print("To Test query7, try the following manually");
-	print("launch the mongo shell");
-	print('load query 7 as follows: load("query7.js")');
-	print('Do find on the collection countbymonth');
-	print('It should be sorted by month');
-	print('And it should have an entry that looks something like this');
-	print("{ _id: ObjectId('some UUID in Hex'), borncount: 70, MOB: 3 }");
+        print("launch the mongo shell");
+        print('load query 7 as follows: load("query7.js")');
+        print('Do find on the collection countbymonth');
+        print('It should be sorted by month');
+        print('And it should have an entry that looks something like this');
+        print("{ _id: ObjectId('some UUID in Hex'), borncount: 70, MOB: 3 }");
     }
     cleanUp();
 
