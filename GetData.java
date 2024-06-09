@@ -55,8 +55,8 @@ public class GetData {
 
 
             ResultSet rst = stmt.executeQuery(
-                "SELECT U.MONTH_OF_BIRTH, C1.COUNTRY_NAME, C1.CITY_NAME, C1.STATE_NAME, C2.COUNTRY_NAME, " + 
-                "C2.CITY_NAME, C2.STATE_NAME, U.GENDER, U.USER_ID, U.DAY_OF_BIRTH, U.LAST_NAME, U.FIRST_NAME, U.YEAR_OF_BIRTH " +
+                "SELECT U.MONTH_OF_BIRTH, C2.COUNTRY_NAME, C2.CITY_NAME, C2.STATE_NAME, C1.COUNTRY_NAME, " + 
+                "C1.CITY_NAME, C1.STATE_NAME, U.GENDER, U.USER_ID, U.DAY_OF_BIRTH, U.LAST_NAME, U.FIRST_NAME, U.YEAR_OF_BIRTH " +
                 "FROM " + userTableName + " U " +
                 "JOIN " + currentCityTableName + " curC ON U.USER_ID = curC.USER_ID " +
                 "JOIN " + hometownCityTableName + " homeC ON U.USER_ID = homeC.USER_ID " +
@@ -95,7 +95,7 @@ public class GetData {
                 "FROM " + userTableName + " U " +
                 "JOIN " + currentCityTableName + " curC ON U.USER_ID = curC.USER_ID " +
                 "JOIN " + cityTableName + " C1 ON curC.CURRENT_CITY_ID = C1.CITY_ID " +
-                "JOIN " + hometownCityTableName + " homeC ON homeC.USER_ID IS NULL "
+                "JOIN " + hometownCityTableName + " homeC ON (homeC.USER_ID IS NULL) "
             );
 
             while (rstHomeNull.next()) {
@@ -126,7 +126,7 @@ public class GetData {
                 "FROM " + userTableName + " U " +
                 "JOIN " + hometownCityTableName + " homeC ON U.USER_ID = homeC.USER_ID " +
                 "JOIN " + cityTableName + " C1 ON homeC.HOMETOWN_CITY_ID = C1.CITY_ID " +
-                "JOIN " + currentCityTableName + " curC ON curC.USER_ID IS NULL "
+                "JOIN " + currentCityTableName + " curC ON (curC.USER_ID IS NULL) "
             );
 
             while (rstCurNull.next()) {
@@ -155,8 +155,8 @@ public class GetData {
                 "SELECT U.MONTH_OF_BIRTH, " + 
                 "U.GENDER, U.USER_ID, U.DAY_OF_BIRTH, U.LAST_NAME, U.FIRST_NAME, U.YEAR_OF_BIRTH " +
                 "FROM " + userTableName + " U " +
-                "JOIN " + currentCityTableName + " curC ON curC.USER_ID IS NULL " +
-                "JOIN " + hometownCityTableName + " homeC ON homeC.USER_ID IS NULL "
+                "JOIN " + currentCityTableName + " curC ON (curC.USER_ID IS NULL) " +
+                "JOIN " + hometownCityTableName + " homeC ON (homeC.USER_ID IS NULL) "
             );
 
             while (rstBothNull.next()) {
