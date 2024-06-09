@@ -64,7 +64,6 @@ public class GetData {
                 "JOIN " + cityTableName + " C2 ON homeC.HOMETOWN_CITY_ID = C2.CITY_ID"
             );
 
-            JSONArray userArray = new JSONArray();
             while (rst.next()) {
                 JSONObject user = new JSONObject();
 
@@ -87,7 +86,7 @@ public class GetData {
                 user.put("first_name", rst.getString(12));
                 user.put("YOB", rst.getString(13));
 
-                userArray.put(user);
+                users_info.put(user);
             }
 
             ResultSet rstHomeNull = stmt.executeQuery(
@@ -118,7 +117,7 @@ public class GetData {
                 user.put("first_name", rst.getString(9));
                 user.put("YOB", rst.getString(10));
 
-                userArray.put(user);
+                users_info.put(user);
             }
 
             ResultSet rstCurNull = stmt.executeQuery(
@@ -149,7 +148,7 @@ public class GetData {
                 user.put("first_name", rst.getString(9));
                 user.put("YOB", rst.getString(10));
 
-                userArray.put(user);
+                users_info.put(user);
             }
 
             ResultSet rstBothNull = stmt.executeQuery(
@@ -176,11 +175,11 @@ public class GetData {
                 user.put("first_name", rst.getString(6));
                 user.put("YOB", rst.getString(7));
 
-                userArray.put(user);
+                users_info.put(user);
             }
 
-            for (int i = 0; i < userArray.length(); i++) {
-                JSONObject user = userArray.getJSONObject(i);
+            for (int i = 0; i < users_info.length(); i++) {
+                JSONObject user = users_info.getJSONObject(i);
                 
                 JSONArray friends = new JSONArray();
 
@@ -192,11 +191,6 @@ public class GetData {
                 }
                 user.put("friends", friends);
             }
-
-
-
-
-            
 
             
             stmt.close();
