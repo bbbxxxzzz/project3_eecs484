@@ -67,7 +67,7 @@ public class GetData {
             while (rst.next()) {
                 JSONObject user = new JSONObject();
 
-                user.put("MOB", rst.getString(1));
+                user.put("MOB", rst.getLong(1));
 
                 user.put("hometown", new JSONObject());
                 user.getJSONObject("hometown").put("country", rst.getString(2));
@@ -80,11 +80,11 @@ public class GetData {
                 user.getJSONObject("current").put("state", rst.getString(7));
 
                 user.put("gender", rst.getString(8));
-                user.put("user_id", rst.getString(9));
-                user.put("DOB", rst.getString(10));
+                user.put("user_id", rst.getLong(9));
+                user.put("DOB", rst.getLong(10));
                 user.put("last_name", rst.getString(11));
                 user.put("first_name", rst.getString(12));
-                user.put("YOB", rst.getString(13));
+                user.put("YOB", rst.getLong(13));
 
                 users_info.put(user);
             }
@@ -101,7 +101,7 @@ public class GetData {
             while (rstHomeNull.next()) {
                 JSONObject user = new JSONObject();
 
-                user.put("MOB", rstHomeNull.getString(1));
+                user.put("MOB", rstHomeNull.getLong(1));
 
                 user.put("hometown", new JSONObject());
 
@@ -111,11 +111,11 @@ public class GetData {
                 user.getJSONObject("current").put("state", rstHomeNull.getString(4));
 
                 user.put("gender", rst.getString(5));
-                user.put("user_id", rst.getString(6));
-                user.put("DOB", rst.getString(7));
+                user.put("user_id", rst.getLong(6));
+                user.put("DOB", rst.getLong(7));
                 user.put("last_name", rst.getString(8));
                 user.put("first_name", rst.getString(9));
-                user.put("YOB", rst.getString(10));
+                user.put("YOB", rst.getLong(10));
 
                 users_info.put(user);
             }
@@ -132,7 +132,7 @@ public class GetData {
             while (rstCurNull.next()) {
                 JSONObject user = new JSONObject();
 
-                user.put("MOB", rstHomeNull.getString(1));
+                user.put("MOB", rstHomeNull.getLong(1));
 
                 user.put("hometown", new JSONObject());
                 user.getJSONObject("hometown").put("country", rstHomeNull.getString(2));
@@ -142,11 +142,11 @@ public class GetData {
                 user.put("current", new JSONObject());
 
                 user.put("gender", rst.getString(5));
-                user.put("user_id", rst.getString(6));
-                user.put("DOB", rst.getString(7));
+                user.put("user_id", rst.getLong(6));
+                user.put("DOB", rst.getLong(7));
                 user.put("last_name", rst.getString(8));
                 user.put("first_name", rst.getString(9));
-                user.put("YOB", rst.getString(10));
+                user.put("YOB", rst.getLong(10));
 
                 users_info.put(user);
             }
@@ -162,18 +162,18 @@ public class GetData {
             while (rstBothNull.next()) {
                 JSONObject user = new JSONObject();
 
-                user.put("MOB", rstHomeNull.getString(1));
+                user.put("MOB", rstHomeNull.getLong(1));
 
                 user.put("hometown", new JSONObject());
 
                 user.put("current", new JSONObject());
 
                 user.put("gender", rst.getString(2));
-                user.put("user_id", rst.getString(3));
-                user.put("DOB", rst.getString(4));
+                user.put("user_id", rst.getLong(3));
+                user.put("DOB", rst.getLong(4));
                 user.put("last_name", rst.getString(5));
                 user.put("first_name", rst.getString(6));
-                user.put("YOB", rst.getString(7));
+                user.put("YOB", rst.getLong(7));
 
                 users_info.put(user);
             }
@@ -184,16 +184,19 @@ public class GetData {
                 JSONArray friends = new JSONArray();
 
                 ResultSet rstFriends = stmt.executeQuery(
-                    "SELECT USER_ID2 FROM BidirectionalFriends WHERE USER_ID1 = " + user.getString("user_id")
+                    "SELECT USER_ID2 FROM BidirectionalFriends WHERE USER_ID1 = " + user.getLong("user_id")
                 );
                 while (rstFriends.next()) {
-                    friends.put(rstFriends.getInt(1));
+                    friends.put(rstFriends.getLong(1));
                 }
                 user.put("friends", friends);
             }
 
-            
+            rst.close();
+            rstHomeNull.close();
+            rstCurNull.close();
             stmt.close();
+
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
