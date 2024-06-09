@@ -184,7 +184,7 @@ public class GetData {
                 JSONArray friends = new JSONArray();
 
                 ResultSet rstFriends = stmt.executeQuery(
-                    "SELECT USER_ID2 FROM " + friendsTableName + " WHERE USER_ID1 = " + user.getLong("user_id")
+                    "SELECT USER2_ID FROM " + friendsTableName + " WHERE USER1_ID = " + user.getLong("user_id")
                 );
                 while (rstFriends.next()) {
                     friends.put(rstFriends.getLong(1));
