@@ -179,7 +179,7 @@ public class GetData {
             }
 
             for (int i = 0; i < users_info.length(); i++) {
-                JSONObject user = users_info.getJSONObject(i);
+                JSONObject user = users_info[i];
                 
                 JSONArray friends = new JSONArray();
 
