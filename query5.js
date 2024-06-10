@@ -39,6 +39,7 @@ function oldest_friend(dbname) {
 
     // Combine the results
     let combined = original.concat(inverse);
+    console.log(combined);
 
     // Insert combined results into the final collection
     db.flat_friends_combined.insertMany(combined);
