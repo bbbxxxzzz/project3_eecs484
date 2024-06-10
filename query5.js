@@ -14,9 +14,9 @@ function oldest_friend(dbname) {
     // TODO: implement oldest friends
     db.users.aggregate([
         {$project: {
+            _id: 0, 
             user_id: 1,
-            friends: 1,
-            _id: 0
+            friends: 1
         }},
         
         {$unwind: "$friends"},
@@ -27,6 +27,7 @@ function oldest_friend(dbname) {
     // Create inverse relationships
     db.flat_friends_temp.aggregate([
         { $project: {
+            _id: 0,
             user_id: "$friends",
             friends: "$user_id"
         }},
@@ -39,16 +40,7 @@ function oldest_friend(dbname) {
 
     // Combine the results
     let combined = original.concat(inverse);
-    combined = combined.aggregate([
-        {
-            project: {
-                _id: 0,
-                user_id: 1,
-                friends: 1
-            }
-        }
-    ]);
-    
+
     // Insert combined results into the final collection
     db.flat_friends_combined.insertMany(combined);
 
