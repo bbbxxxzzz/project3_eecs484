@@ -33,11 +33,19 @@ function oldest_friend(dbname) {
         { $out: "flat_friends_inverse" }
     ]);
 
-    // Combine original and inverse relationships
-    db.flat_friends_temp.aggregate([
-        { $unionWith: { coll: "flat_friends_inverse" } },
-        { $out: "flat_friends_combined" }
-    ]);
+    // Retrieve original and inverse relationships and merge them in the application code
+    let original = db.flat_friends_temp.find().toArray();
+    let inverse = db.flat_friends_inverse.find().toArray();
+
+    // Combine the results
+    let combined = original.concat(inverse);
+
+    // Insert combined results into the final collection
+    db.flat_friends_combined.insertMany(combined);
+
+    // Clean up temporary collections
+    db.flat_friends_temp.drop();
+    db.flat_friends_inverse.drop();
 
     db.flat_friends_combined.aggregate([
 
@@ -53,7 +61,7 @@ function oldest_friend(dbname) {
         {
             $project: {
                 user_id: 1,
-                friend_id: "$friends",
+                friend_id: 1,
                 friend_YOB: "$friend_info.YOB"
             }
         },
@@ -81,9 +89,6 @@ function oldest_friend(dbname) {
         results[result.user_id] = result.oldest_friend;
     });
 
-    // Clean up temporary collections
-    db.flat_friends_temp.drop();
-    db.flat_friends_inverse.drop();
     db.flat_friends_combined.drop();
 
     
