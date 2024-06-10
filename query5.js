@@ -52,7 +52,7 @@ function oldest_friend(dbname) {
         {
             $lookup: {
                 from: "users",
-                localField: "friends",
+                localField: "$friends",
                 foreignField: "user_id",
                 as: "friend_info"
             }
