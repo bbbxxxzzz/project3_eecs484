@@ -39,10 +39,19 @@ function oldest_friend(dbname) {
 
     // Combine the results
     let combined = original.concat(inverse);
-
+    combined = combined.aggregate([
+        {
+            project: {
+                _id: 0,
+                user_id: 1,
+                friends: 1
+            }
+        }
+    ]);
+    
     // Insert combined results into the final collection
     db.flat_friends_combined.insertMany(combined);
-    db.flat_friends_combined.find();
+
     // Clean up temporary collections
     db.flat_friends_temp.drop();
     db.flat_friends_inverse.drop();
