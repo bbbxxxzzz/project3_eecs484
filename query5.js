@@ -62,7 +62,7 @@ function oldest_friend(dbname) {
         {
             $project: {
                 user_id: 1,
-                friend_id: 1,
+                friend_id: "$friends",
                 friend_YOB: "$friend_info.YOB"
             }
         },
