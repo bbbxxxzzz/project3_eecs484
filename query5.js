@@ -58,7 +58,7 @@ function oldest_friend(dbname) {
                 as: "friend_info"
             }
         },
-        { $unwind: "$friend_info" },
+
         {
             $project: {
                 user_id: 1,
