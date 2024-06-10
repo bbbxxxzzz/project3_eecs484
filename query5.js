@@ -13,24 +13,38 @@ function oldest_friend(dbname) {
     let results = {};
     // TODO: implement oldest friends
     db.users.aggregate([
-        { $unwind: "$friends" },
-        { 
-            $project: {
-                user_id: 1,
-                friend_id: "$friends"
-            }
-        },
-        { 
-            $out: "flat_friends"
-        }
+        {$project: {
+            user_id: 1,
+            friends: 1,
+            _id: 0
+        }},
+        
+        {$unwind: "$friends"},
+
+        {$out: "flat_friends_temp"}
     ]);
 
-    // Create a collection of friends with their YOB
-    db.flat_friends.aggregate([
+    // Create inverse relationships
+    db.flat_friends_temp.aggregate([
+        { $project: {
+            user_id: "$friends",
+            friends: "$user_id"
+        }},
+        { $out: "flat_friends_inverse" }
+    ]);
+
+    // Combine original and inverse relationships
+    db.flat_friends_temp.aggregate([
+        { $unionWith: { coll: "flat_friends_inverse" } },
+        { $out: "flat_friends_combined" }
+    ]);
+
+    db.flat_friends_combined.aggregate([
+
         {
             $lookup: {
                 from: "users",
-                localField: "friend_id",
+                localField: "friends",
                 foreignField: "user_id",
                 as: "friend_info"
             }
@@ -39,59 +53,39 @@ function oldest_friend(dbname) {
         {
             $project: {
                 user_id: 1,
-                friend_id: 1,
+                friend_id: "$friends",
                 friend_YOB: "$friend_info.YOB"
             }
         },
         {
-            $out: "friend_info"
-        }
-    ]);
-
-    // Find the oldest friend for each user
-    let result = db.friend_info.aggregate([
+            $sort: {
+                user_id: 1,
+                friend_YOB: 1,
+                friend_id: 1
+            }
+        },
         {
             $group: {
                 _id: "$user_id",
-                oldest_friend: {
-                    $first: "$friend_id"
-                },
-                min_yob: { $min: "$friend_YOB" }
+                oldest_friend: { $first: "$friend_id" }
             }
         },
-        {
-            $lookup: {
-                from: "friend_info",
-                let: { user_id: "$_id", min_yob: "$min_yob" },
-                pipeline: [
-                    { $match: {
-                        $expr: {
-                            $and: [
-                                { $eq: ["$user_id", "$$user_id"] },
-                                { $eq: ["$friend_YOB", "$$min_yob"] }
-                            ]
-                        }
-                    }},
-                    { $sort: { friend_id: 1 } },
-                    { $limit: 1 }
-                ],
-                as: "oldest_friend_info"
-            }
-        },
-        { $unwind: "$oldest_friend_info" },
         {
             $project: {
                 _id: 0,
                 user_id: "$_id",
-                oldest_friend: "$oldest_friend_info.friend_id"
+                oldest_friend: 1
             }
         }
-    ]).toArray();
-
-    // Convert the result to a JavaScript object
-    result.forEach(doc => {
-        results[doc.user_id] = doc.oldest_friend;
+    ]).forEach(result => {
+        results[result.user_id] = result.oldest_friend;
     });
 
+    // Clean up temporary collections
+    db.flat_friends_temp.drop();
+    db.flat_friends_inverse.drop();
+    db.flat_friends_combined.drop();
+
+    
     return results;
 }
